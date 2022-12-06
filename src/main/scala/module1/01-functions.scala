@@ -46,7 +46,7 @@ object functions {
   // Partial function
 
   val divide: PartialFunction[(Int, Int), Int] = {
-     case x if x._2 != 0 => x._1 / x._2
+    case x if x._2 != 0 => x._1 / x._2
   }
 
   val l = List((4, 2), (5, 0), (9, 3))
@@ -68,24 +68,24 @@ object functions {
    *  Задание 1. Написать ф-цию метод isEven, которая будет вычислять является ли число четным
    */
 
-
+  def isEven(number: Int): Boolean = if (number % 2 == 0) true else false
   /**
    * Задание 2. Написать ф-цию метод isOdd, которая будет вычислять является ли число нечетным
    */
 
-
+  def isOdd(number: Int): Boolean = ! isEven(number)
   /**
    * Задание 3. Написать ф-цию метод filterEven, которая получает на вход массив чисел и возвращает массив тех из них,
    * которые являются четными
    */
 
-
+  def filterEven(numbers: Array[Int]): Array[Int] = numbers.filter( _ % 2 == 0)
 
   /**
    * Задание 4. Написать ф-цию метод filterOdd, которая получает на вход массив чисел и возвращает массив тех из них,
    * которые являются нечетными
    */
-
+  def filerOdd(numbers: Array[Int]): Array[Int] = numbers.filter(_ % 2 != 0)
 
   /**
    * return statement

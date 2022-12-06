@@ -46,7 +46,7 @@ object functions {
   // Partial function
 
   val divide: PartialFunction[(Int, Int), Int] = {
-    case x if x._2 != 0 => x._1 / x._2
+     case x if x._2 != 0 => x._1 / x._2
   }
 
   val l = List((4, 2), (5, 0), (9, 3))

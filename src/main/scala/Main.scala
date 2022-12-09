@@ -1,12 +1,11 @@
-import module1.functions
+import module1.{functions, type_system}
 
 object Main{
 
 
   def main(args: Array[String]): Unit = {
 
-
-    functions.p("Yep")
+    println(type_system.v.foo())
     println("Hello, World!")
   }
 

@@ -68,31 +68,18 @@ object type_system {
 
     val user: User = User.from("foo@foo.com", "123")
 
-    object User {
-      def from(email: String, password: String): User =
-        new User(email, password)
-    }
+  // A -> (B -> C -> E) -> (D) -> (уже нет C) -> (уже нет B)
+  val v1 = new A with E with D with C with B
+  val u2 = User2("foo@foo.com", "123")
 
 
-
-
-
-
-    /**
-     * Задание 1: Создать класс "Прямоугольник"(Rectangle),
-     * мы должны иметь возможность создавать прямоугольник с заданной
-     * длиной(length) и шириной(width), а также вычислять его периметр и площадь
-     *
-     */
-
-
-    /**
-     * object
-     *
-     * 1. Паттерн одиночка
-     * 2. Ленивая инициализация
-     * 3. Могут быть компаньоны
-     */
+  /**
+   * object
+   *
+   * 1. Паттерн одиночка
+   * 2. Ленивая инициализация
+   * 3. Могут быть компаньоны
+   */
 
 
     /**
@@ -101,30 +88,39 @@ object type_system {
      */
 
     case class User2(email: String, password: String)
+  val u3 = u2.copy(password = "345")
 
-    val u2 = User2("foo@foo.com", "123")
-
-    val u3 = u2.copy(password = "345")
-
-
-    // создать case класс кредитная карта с двумя полями номер и cvc
-
-
-    /**
-     * case object
-     *
-     * Используются для создания перечислений или же в качестве сообщений для Акторов
-     */
-
-
-    /**
-     * trait
+  /**
+   * trait
      *
      */
 
     trait WithId{
       def id: String
     }
+
+
+  // создать case класс кредитная карта с двумя полями номер и cvc
+
+  /**
+   * Задание 1: Создать класс "Прямоугольник"(Rectangle),
+   * мы должны иметь возможность создавать прямоугольник с заданной
+   * длиной(length) и шириной(width), а также вычислять его периметр и площадь
+   *
+   */
+  class Rectangle(val width: Double, val height: Double) {
+    def perimeter(): Double = 2 * (width + height)
+
+    def area(): Double = width * height
+  }
+
+  /**
+   * case object
+   *
+   * Используются для создания перечислений или же в качестве сообщений для Акторов
+   */
+
+  case class CreditCard(number: String, cvc: String)
 
     sealed trait UserService{
       def getUserById(id: String): User
@@ -176,8 +172,10 @@ object type_system {
   // A -> D -> B -> C
   val v = new A with D with C with B
 
-
-  val v1 = new A with E with D with C with B
+  object User {
+    def from(email: String, password: String): User =
+      new User(email, password)
+  }
 
 
   /**

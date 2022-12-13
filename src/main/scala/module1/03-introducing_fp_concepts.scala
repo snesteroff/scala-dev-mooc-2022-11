@@ -96,7 +96,7 @@ object recursion {
    * F0 = 0, F1 = 1, Fn = Fn-1 + Fn - 2
    *
    */
-  def fibonacci(n: Int): Int = {
+  def fibbonacci(n: Int): Int = {
     if (n < 0) return 0
 
     @tailrec
@@ -297,38 +297,50 @@ object hof{
     */
 
    trait List[+T] {
-     def ::[TT >: T](elem: TT): List[TT] = List.::(elem, this)
-
      /**
       * Метод cons, добавляет элемент в голову списка, для этого метода можно воспользоваться названием `::`
       *
       */
+     def ::[TT >: T](elem: TT): List[TT] = List.::(elem, this)
 
      /**
       * Метод mkString возвращает строковое представление списка, с учетом переданного разделителя
       *
       */
-
-     /**
-      * Конструктор, позволяющий создать список из N - го числа аргументов
-      * Для этого можно воспользоваться *
-      *
-      * Например вот этот метод принимает некую последовательность аргументов с типом Int и выводит их на печать
-      * def printArgs(args: Int*) = args.foreach(println(_))
-      */
+      def mkString(sep: String = ""): String = {
+        @tailrec
+        def go(list: List[T], acc: String): String = list match {
+          case List.Nil => acc
+          case List.::(h, t) => {
+            val ss = if (acc.isEmpty) "" else sep
+            go(t, acc + ss + h.toString)
+          }
+        }
+        go(this, "")
+      }
 
      /**
       *
       * Реализовать метод reverse который позволит заменить порядок элементов в списке на противоположный
       */
-
+     def reverse(): List[T] = {
+       @tailrec
+       def go(list: List[T], acc: List[T] = List.Nil): List[T] =
+         list match {
+           case List.Nil => acc
+           case List.::(h, t) => go(t, h :: acc)
+         }
+       go(this)
+     }
      /**
       *
       * Реализовать метод map для списка который будет применять некую ф-цию к элементам данного списка
       */
 
+     def map[B](f: T => B): List[B] = flatMap(t => List(f(t)))
+
      def ++[TT >: T](addList: List[TT]): List[TT] = this match {
-       case List.::(h, t) => List.::(h, t.++(addList))
+       case List.::(h, t) => h :: (t ++ addList)
        case _ => addList
      }
 
@@ -342,19 +354,11 @@ object hof{
       *
       * Реализовать метод filter для списка который будет фильтровать список по некому условию
       */
+      def filter(f: T => Boolean): List[T] = this match {
+        case List.::(h, t) => if (f(h)) h :: t.filter(f) else t.filter(f)
+        case _ => List.Nil
+      }
 
-     /**
-      *
-      * Написать функцию incList котрая будет принимать список Int и возвращать список,
-      * где каждый элемент будет увеличен на 1
-      */
-
-
-     /**
-      *
-      * Написать функцию shoutString котрая будет принимать список String и возвращать список,
-      * где к каждому элементу будет добавлен префикс в виде '!'
-      */
 
    }
 
@@ -362,15 +366,30 @@ object hof{
      case class ::[A](head: A, tail: List[A]) extends List[A]
      case object Nil extends List[Nothing]
 
+     /**
+      *
+      * Написать функцию incList котрая будет принимать список Int и возвращать список,
+      * где каждый элемент будет увеличен на 1
+      */
+      def incList(list: List[Int]): List[Int] = list.map( _ + 1 )
+
+     /**
+      *
+      * Написать функцию shoutString котрая будет принимать список String и возвращать список,
+      * где к каждому элементу будет добавлен префикс в виде '!'
+      */
+     def shoutString(list: List[String]): List[String] = list.map( "!" + _ )
+
+     /**
+      * Конструктор, позволяющий создать список из N - го числа аргументов
+      * Для этого можно воспользоваться *
+      *
+      * Например вот этот метод принимает некую последовательность аргументов с типом Int и выводит их на печать
+      * def printArgs(args: Int*) = args.foreach(println(_))
+      */
      def apply[A](v: A*): List[A] =
        if(v.isEmpty) Nil else ::(v.head, apply(v.tail:_*))
    }
 
    List(1, 2, 3)
-
-
-
-
-
-
  }

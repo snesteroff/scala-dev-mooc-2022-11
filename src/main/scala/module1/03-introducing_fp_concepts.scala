@@ -15,6 +15,7 @@ import scala.language.postfixOps
 
  object referential_transparency{
 
+  // Test 2
   case class Abiturient(id: String, email: String, fio: String)
 
   type Html = String

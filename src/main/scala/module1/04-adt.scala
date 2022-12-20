@@ -49,8 +49,9 @@ object adt {
 
     // Создать case class для кредитной карты
 
+    lazy val cc = CreditCard("1234 4567 4321 0987", YearMonth.of(2024, 11), "Ivanov Ivan", 461)
 
-    lazy val cc = ???
+    case class CreditCard(number: String, validTill: YearMonth, name: String, code: Short)
 
   }
 
@@ -78,8 +79,8 @@ object adt {
     val v3: BooleanOrUnit = Right(())
 
     /** Реализовать экземпляр типа IntOrString с помощью конструктора Right(_)
-      */
-    val intOrString = ???
+     */
+    val intOrString = Right(_)
 
 
     final case class CreditCard()
@@ -103,7 +104,7 @@ object adt {
     final case class Cash() extends PaymentMethod
 
 
-    val pm: PaymentMethod = ???
+    val pm: PaymentMethod = CreditCard()
 
   }
 

@@ -30,14 +30,16 @@ object task_futures_sequence {
     val failed2 = Future.failed(ex2)
 
     // , Future.failed(new Exception())
-    val f = fullSequence(List(Future {
-      new RuntimeException()
-    }, li, Future.successful(1),
+    val f = fullSequence(List(
+      Future {
+        new RuntimeException()
+      }, li, Future.successful(1),
       Future {
         new NullPointerException()
       },
       Future.successful(2), Future {
-        Thread.sleep(1000); 6
+        Thread.sleep(1000);
+        6
       },
       failed2, failed1
     ))
@@ -53,14 +55,22 @@ object task_futures_sequence {
    * @return асинхронную задачу с кортежом из двух списков
    */
   def fullSequence[A](futures: List[Future[A]])
-                     (implicit ex: ExecutionContext): Future[(List[A], List[Throwable])] = {
-    //  def fuseq[A](f: List[Future[A]])(implicit ex: ExecutionContext): Future[(List[A], List[Throwable])] = {
-    val ff = futures.foldLeft(Future.successful((List.empty[A], List.empty[Throwable]))) {
+                     (implicit ex: ExecutionContext): Future[(List[A], List[Throwable])] =
+    futures.foldLeft(Future.successful((List.empty[A], List.empty[Throwable]))) {
       (fr, fa) =>
-        fr.zipWith(fa)((t, a) => if (a.isInstanceOf[Throwable])
-          (t._1, t._2 :+ a.asInstanceOf[Throwable]) else
-          (t._1 :+ a, t._2))
+
+        fr.zipWith(fa.transform {
+          t =>
+            t match {
+              case Success(s) => Success(s)
+              case Failure(ff) => Success(ff.asInstanceOf[A])
+            }
+        })((t, a) => a match {
+          case th: Throwable => (t._1, t._2 :+ th)
+          case _ => (t._1 :+ a, t._2)
+        })(ex)
+
     }
-    ff.map(identity)(ex)
-  }
+
+
 }

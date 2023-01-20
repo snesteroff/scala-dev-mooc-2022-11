@@ -31,7 +31,6 @@ object implicits {
 
     // "foo" / 42
    implicit val seq = Seq("a", "b", "c")
-
     def log(str: String): Unit = println(str)
 
     val res = log(2)

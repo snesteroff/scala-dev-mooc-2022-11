@@ -42,7 +42,6 @@ object controlStructures {
   val x3: Any = if (cond) println("yes") else "no"
 
 
-
   /**
    * циклы while / do while
    * Повторяют выполнение своего тела, пока условие истинно. Подразумевают наличие side effect.
@@ -50,10 +49,10 @@ object controlStructures {
    */
 
 
-  val x: Unit = do{
-    println("hey")
-
-  } while (cond)
+  //  val x: Unit = do{
+  //    println("hey")
+  //
+  //  } while (cond)
 
   /**
    * цикл for позволяет итерироваться по коллекциям,
@@ -61,10 +60,9 @@ object controlStructures {
    */
 
   val l = List(1, 2, 3)
-   for(i <- 0 until  10 by 2){
-     println(i)
-   }
-
+  for (i <- 0 until 10 by 2) {
+    println(i)
+  }
 
 
 }

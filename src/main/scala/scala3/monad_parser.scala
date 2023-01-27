@@ -2,7 +2,7 @@ package scala3
 
 //import scala.language.postfixOps
 
-object S3:
+object Scala3:
   @main def parseMain(): Unit =
     val str = "1,test1,true\n2,test2,false,\n3,test3,true"
     val res = new ParserWithGivenParam().readCSVString(str)
@@ -16,7 +16,11 @@ object S3:
         field3 <- boolField
       yield TestClass(field1, field2, field3)
 
-    def intField = strField.map(_.toInt)
+    def readCSVString(str: String) = str.split("\n").map(parser.parse)
+
+    def intField(using ctx: FieldConversion[String, Int]) = strField.map(ctx.convert(_))
+
+    def boolField(using ctx: FieldConversion[String, Boolean]) = strField.map(ctx.convert(_))
 
     def strField = MonadParser[String, String] { str =>
       val idx = str.indexOf(",")
@@ -26,9 +30,14 @@ object S3:
         (str, "")
     }
 
-    def boolField = strField.map(_.toBoolean)
+    trait FieldConversion[String, A]:
+      def convert(x: String): A
 
-    def readCSVString(str: String) = str.split("\n").map(parser.parse)
+    given intFieldConversion: FieldConversion[String, Int] with
+      def convert(x: String): Int = x.toInt
+
+    given boolFieldConversion: FieldConversion[String, Boolean] with
+      def convert(x: String): Boolean = x.toBoolean
 
     class MonadParser[T, Src](private val p: Src => (T, Src)):
       def flatMap[M](f: T => MonadParser[M, Src]): MonadParser[M, Src] =

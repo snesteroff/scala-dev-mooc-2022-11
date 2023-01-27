@@ -176,7 +176,7 @@ object future{
 
   val f1 = Future.successful(10)
   val f2 = Future.failed(new Exception())
-  val f3 = Future.fromTry(Try())
+  //val f3 = Future.fromTry(Try())
 
 
 
